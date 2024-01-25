@@ -7,6 +7,7 @@ import App from "../app";
 
 const gameDescriptions = {
   regular: "Conventional 15 card booster packs",
+  pokemon: "Custom Pokemon booster packs",
   cube: "A user curated draft set",
   chaos: "Randomized booster packs",
   decadent: "Packs are discarded after first pick"
@@ -14,7 +15,7 @@ const gameDescriptions = {
 
 const GameTypes = () => {
   const gameOptions = {
-    draft: ["regular", "cube", "chaos", "decadent"],
+    draft: ["regular", "pokemon", "cube", "chaos", "decadent"],
     sealed: ["regular", "cube", "chaos"]
   };
 

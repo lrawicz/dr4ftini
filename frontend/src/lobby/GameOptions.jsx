@@ -11,9 +11,9 @@ import CubeList from "./CubeList";
 
 const GameOptions = () => {
   const { 
-      setsDraft, setsSealed, setsDecadentDraft, 
-      gametype, gamesubtype, 
-      picksPerPack} = App.state;
+      setsDraft, setsSealed, setsDecadentDraft, setsPokemon,
+      gametype, gamesubtype, picksPerPack
+    } = App.state;
 
   switch (`${gamesubtype} ${gametype}`) {
   case "regular draft":
@@ -22,6 +22,8 @@ const GameOptions = () => {
     return <RegularSealed sets={setsSealed} type={"setsSealed"} />;
   case "decadent draft":
     return <Decadent sets={setsDecadentDraft} type={"setsDecadentDraft"} picksPerPack={picksPerPack}/>;
+  case "pokemon draft":
+    return <PokemonDraft sets={setsPokemon} type={"setsPokemon"} picksPerPack={picksPerPack}/>;
   case "cube draft":
     return <CubeDraft picksPerPack={picksPerPack} />;
   case "cube sealed":
@@ -89,6 +91,19 @@ const Sets = ({sets, type}) => (
       />
     )
   })
+);
+
+const PokemonDraft = ({sets, type, picksPerPack}) => (
+  <div>
+    <div>
+      Number of packs:{" "}
+      <Select
+        value={sets.length}
+        onChange={App._emit("changeSetsNumber", type)}
+        opts={_.seq(12, 1)} />
+    </div>
+    <PicksPerPacks picksPerPack={picksPerPack} />
+  </div>
 );
 
 const Decadent = ({sets, type, picksPerPack}) => (

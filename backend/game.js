@@ -41,6 +41,7 @@ module.exports = class Game extends Room {
     // Handle packsInfos to show various informations about the game
     switch(type) {
     case "draft":
+    case "pokemon draft":
     case "sealed":
       this.packsInfo = this.sets.join(" / ");
       this.rounds = this.sets.length;
@@ -490,6 +491,13 @@ module.exports = class Game extends Room {
     case "draft":
     case "decadent draft": {
       this.pool = Pool.DraftNormal({
+        playersLength: this.players.length,
+        sets: this.sets
+      });
+      break;
+    }
+    case "pokemon draft": {
+      this.pool = Pool.getPokemonDraft({
         playersLength: this.players.length,
         sets: this.sets
       });

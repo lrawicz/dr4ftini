@@ -38,6 +38,7 @@ let App = {
     sets: [],
     setsDraft: [],
     setsSealed: [],
+    setsPokemon: ["PKMN", "PKMN", "PKMN"],
     setsDecadentDraft: [],
     availableSets: {},
     list: "",
@@ -93,6 +94,9 @@ let App = {
     },
     get isDecadentDraft() {
       return /decadent draft/.test(App.state.game.type);
+    },
+    get isPokemonDraft() {
+      return /pokemon draft/.test(App.state.game.type);
     },
 
     get notificationBlocked() {
@@ -193,6 +197,7 @@ let App = {
       };
       initializeIfEmpty(App.state.setsSealed, 6);
       initializeIfEmpty(App.state.setsDraft, 3);
+      initializeIfEmpty(App.state.setsPokemon, 3);
       initializeIfEmpty(App.state.setsDecadentDraft, 36);
     }
     App.update();

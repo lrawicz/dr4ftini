@@ -1,6 +1,6 @@
 const {sample, shuffle, random, range, times, constant, pull} = require("lodash");
 const boosterGenerator = require("./boosterGenerator");
-const { getCardByUuid, getCardByName, getRandomSet, getExpansionOrCoreModernSets: getModernList, getExansionOrCoreSets: getSetsList } = require("./data");
+const { getCardByUuid,getSet, getCardByName, getRandomSet, getExpansionOrCoreModernSets: getModernList, getExansionOrCoreSets: getSetsList } = require("./data");
 const draftId = require("uuid").v1;
 
 /**
@@ -102,11 +102,121 @@ const SealedChaos = ({ playersLength, packsNumber = 6, modernOnly, totalChaos })
     .map(addCardIdsToBoosterCards);
 };
 
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+
+const getPokemonDraft = ({ sets=["PKMN","PKMN","PKMN"], playersLength=8, packsNumber = 3, playerPackSize = 15 }) =>{
+  const set =  getSet(sets[0]);
+  let allSet = [...set.Common, ...set.Uncommon, ...set.Rare, ...set.Mythic, ...set.ManaFix].map(getCardByUuid)
+  //console.log(getCardByUuid(set.Common[0]))
+  //const card = getCardByUuid(sets[0].Common[0])
+  //return (card)
+
+
+
+  let commonCreatures= shuffle(allSet.filter((item)=>{return item.type.includes("Creature") && item.rarity=="Common"}))
+  let uncommonCreatures= shuffle(allSet.filter((item)=>{return item.type.includes("Creature") && item.rarity=="Uncommon"}))
+  let rareCreatures= shuffle(allSet.filter((item)=>{return item.type.includes("Creature") && item.rarity=="Rare"}))
+  let mythicCreatures= shuffle(allSet.filter((item)=>{return item.type.includes("Creature") && item.rarity=="Mythic"}))
+
+  let commonSpells= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && !item.type.includes("Artifact") && item.rarity=="Common")}))
+  let uncommonSpells= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && !item.type.includes("Artifact") && item.rarity=="Uncommon")}))
+  let rareSpells= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && !item.type.includes("Artifact")  && item.rarity=="Rare")}))
+  //let mythicSpells= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && !item.type.includes("Artifact") && item.rarity=="Mythic")}))
+  
+  let commonItems= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && item.type.includes("Artifact") && item.rarity=="Common")}))
+  let uncommonItems= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && item.type.includes("Artifact") && item.rarity=="Uncommon")}))
+  let rareItems= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && item.type.includes("Artifact")  && item.rarity=="Rare")}))
+  //let mythicItems= shuffle(allSet.filter((item)=>{return (!item.type.includes("Creature") && item.type.includes("Artifact") && item.rarity=="Mythic")}))
+  
+  let ManaFix= shuffle(allSet.filter((item)=>{return ( item.rarity=="ManaFix")}))
+//  console.log(ManaFix)
+  let trainers= shuffle(allSet.filter((item)=>{return (item.type.includes("Legendary Trainer"))}))
+
+  
+  let base = range(playersLength * packsNumber).map (()=>{return []})
+
+  base =base.map((item)=>{ item.push(ManaFix.pop()) ; return (item)})
+  // 4 commons creatures
+  for (let index = 0; index < 4; index++) {
+    base =base.map((item)=>{ item.push(commonCreatures.pop()) ; return (item)})
+  }
+  // 3 uncommons creatures
+  for (let index = 0; index < 3; index++) {
+    base =base.map((item)=>{item.push(uncommonCreatures.pop()); return (item)})
+  }
+  // 1 rare creatures
+  for (let index = 0; index < 1; index++) {
+    base =base.map((item)=>{item.push(rareCreatures.pop()); return (item)})
+  }
+  // rare (5/6) or mythic (1/6) creature
+  base =base.map((item)=>{
+    let dice
+    dice = getRandomInt(1,6)
+    if ([1,2,3,4,5].includes(dice)){
+      item.push(rareCreatures.pop());   
+    }else{
+      item.push(mythicCreatures.pop()); 
+    }
+    return (item);
+  })
+
+  // 2 commmon spells
+  for (let index = 0; index < 2; index++) {
+    base =base.map((item)=>{item.push(commonSpells.pop()); return (item)})
+  }
+
+  // 1 uncommmon spells
+  for (let index = 0; index < 1; index++) {
+    base =base.map((item)=>{item.push(uncommonSpells.pop()); return (item)})
+  }
+  
+
+
+  // 1 spells or trainer
+  base =base.map((item)=>{
+    let dice
+    dice = getRandomInt(1,6)
+    if ([1,2,3].includes(dice)){
+      item.push(uncommonSpells.pop());   
+    }else if([4,5].includes(dice)){
+      item.push(rareSpells.pop()); 
+    }else{
+      item.push(trainers.pop()); 
+    }
+    return (item);
+  })
+
+  // 1 artifact
+  base =base.map((item)=>{
+    let dice
+    dice = getRandomInt(1,6)
+    if ([1,2,3].includes(dice)){
+      item.push(commonItems.pop());   
+    }else if([4,5].includes(dice)){
+      item.push(uncommonItems.pop()); 
+    }else{
+      item.push(rareItems.pop()); 
+    }
+    return (item);
+  })
+  //let base2 =base.map(()=>{(commonCreatures.pop())})
+
+  base = base.map((item)=>{return addCardIdsToBoosterCards(item)})
+  return (base)
+}
+
 module.exports = {
   SealedCube,
   DraftCube,
   SealedNormal,
   DraftNormal,
   SealedChaos,
-  DraftChaos
+  DraftChaos,
+  replaceRNGSet,
+  getPokemonDraft
 };
