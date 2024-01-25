@@ -3,7 +3,7 @@ import React from "react";
 export const STRINGS = {
   BRANDING: {
     SITE_TITLE: ["dr4ft", "info"].join("."),
-    SITE_NAME: <span>DR<img src='4.png' alt='4'/>FT</span>,
+    SITE_NAME: <span>DR<img src='4.png' alt='4'/>FTINI</span>,
     DEFAULT_USERNAME: "dr4fter",
     PAYPAL: "",
   },

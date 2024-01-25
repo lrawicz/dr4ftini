@@ -511,6 +511,13 @@ module.exports = class Game extends Room {
       });
       break;
     }
+    case "pokemon sealed": {
+      this.pool = Pool.getPokemonSealed({
+        playersLength: this.players.length,
+        sets: this.sets
+      });
+      break;
+    }
     case "chaos draft": {
       this.pool = Pool.DraftChaos({
         playersLength: this.players.length,

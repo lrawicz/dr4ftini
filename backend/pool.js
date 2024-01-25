@@ -212,8 +212,24 @@ const getPokemonDraft = ({ sets=["PKMN","PKMN","PKMN"], playersLength=8, packsNu
   pool = pool.map((item)=>{return addCardIdsToBoosterCards(item)})
   return (pool)
 }
-}
+const getPokemonSealed = ({sets=["PKMN","PKMN","PKMN"], playersLength=8, packsNumber = 6}) =>{
+  let pool_raw = getPokemonDraft({sets, playersLength, packsNumber})
 
+  return range(playersLength)
+    .map(() => pool_raw.splice(0, packsNumber).flat())
+
+
+  let pool = [];
+  times(playersLength,()=>{
+    let element = []
+    times(packsNumber, ()=>{element.push([pool_raw.pop()])})
+    element = element.flat()
+    console.log("element")
+    console.log(element)
+    pool.push(element)
+  })
+  return pool
+}
 module.exports = {
   SealedCube,
   DraftCube,
@@ -222,5 +238,6 @@ module.exports = {
   SealedChaos,
   DraftChaos,
   replaceRNGSet,
-  getPokemonDraft
+  getPokemonDraft,
+  getPokemonSealed
 };

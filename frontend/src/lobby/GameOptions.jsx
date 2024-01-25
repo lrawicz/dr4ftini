@@ -24,6 +24,8 @@ const GameOptions = () => {
     return <Decadent sets={setsDecadentDraft} type={"setsDecadentDraft"} picksPerPack={picksPerPack}/>;
   case "pokemon draft":
     return <PokemonDraft sets={setsPokemon} type={"setsPokemon"} picksPerPack={picksPerPack}/>;
+  case "pokemon sealed":
+    return <PokemonSealed sets={setsPokemon} type={"setsPokemon"}/>;
   case "cube draft":
     return <CubeDraft picksPerPack={picksPerPack} />;
   case "cube sealed":
@@ -51,6 +53,15 @@ RegularDraft.propTypes = {
 
 const RegularSealed = ({sets, type}) => (
   <Regular sets={sets} type={type} />
+);
+const PokemonSealed = ({sets, type}) => (
+  <div>
+    Number of packs:{" "}
+    <Select
+      value={sets.length}
+      onChange={App._emit("changeSetsNumber", type)}
+      opts={_.seq(12, 1)} />
+  </div>
 );
 
 RegularSealed.propTypes = {
