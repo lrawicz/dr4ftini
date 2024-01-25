@@ -15,8 +15,8 @@ const gameDescriptions = {
 
 const GameTypes = () => {
   const gameOptions = {
-    draft: ["regular", "pokemon", "cube", "chaos", "decadent"],
     sealed: ["regular", "cube", "chaos"]
+    draft: ["regular", "cube", "chaos", "decadent", "pokemon"],
   };
 
   const getAvailableTypes = () => Object.keys(gameOptions);
