@@ -14,7 +14,7 @@ const {saveDraftStats, getDataDir} = require("./data");
 const {distributeArrays} = require("./util");
 
 module.exports = class Game extends Room {
-  constructor({ hostId, title, seats, type, sets, cube, isPrivate, modernOnly, totalChaos, chaosPacksNumber, picksPerPack }) {
+  constructor({ hostId, title, seats, type, sets, cube, isPrivate, modernOnly, totalChaos, chaosPacksNumber, picksPerPack, pokemonVersion="" }) {
     super({ isPrivate });
     const gameID = uuid.v1();
     Object.assign(this, {
@@ -36,12 +36,17 @@ module.exports = class Game extends Room {
       sets: sets || [],
       isDecadent: false,
       secret: uuid.v4(),
+      pokemonVersion: "",
       logger: logger.child({ id: gameID })
     });
     // Handle packsInfos to show various informations about the game
     switch(type) {
-    case "draft":
     case "pokemon draft":
+      this.pokemonVersion = pokemonVersion;
+      this.packsInfo = this.sets.join(" / ");
+      this.rounds = this.sets.length;
+      break;
+    case "draft":
     case "sealed":
       this.packsInfo = this.sets.join(" / ");
       this.rounds = this.sets.length;

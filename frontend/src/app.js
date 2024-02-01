@@ -40,6 +40,7 @@ let App = {
     setsSealed: [],
     setsPokemon: ["PKMN", "PKMN", "PKMN"],
     setsDecadentDraft: [],
+    pokemonVersion: "",
     availableSets: {},
     list: "",
     cards: 15,
@@ -199,6 +200,8 @@ let App = {
       initializeIfEmpty(App.state.setsDraft, 3);
       initializeIfEmpty(App.state.setsPokemon, 3);
       initializeIfEmpty(App.state.setsDecadentDraft, 36);
+      initializeIfEmpty(App.state.pokemonVersion, "");
+
     }
     App.update();
   },

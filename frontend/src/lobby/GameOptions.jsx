@@ -12,7 +12,7 @@ import CubeList from "./CubeList";
 const GameOptions = () => {
   const { 
       setsDraft, setsSealed, setsDecadentDraft, setsPokemon,
-      gametype, gamesubtype, picksPerPack
+      gametype, gamesubtype, picksPerPack,pokemonVersion
     } = App.state;
 
   switch (`${gamesubtype} ${gametype}`) {
@@ -23,7 +23,7 @@ const GameOptions = () => {
   case "decadent draft":
     return <Decadent sets={setsDecadentDraft} type={"setsDecadentDraft"} picksPerPack={picksPerPack}/>;
   case "pokemon draft":
-    return <PokemonDraft sets={setsPokemon} type={"setsPokemon"} picksPerPack={picksPerPack}/>;
+    return <PokemonDraft pokemonVersion={pokemonVersion} sets={setsPokemon} type={"setsPokemon"} picksPerPack={picksPerPack}/>;
   case "pokemon sealed":
     return <PokemonSealed sets={setsPokemon} type={"setsPokemon"}/>;
   case "cube draft":
@@ -104,7 +104,7 @@ const Sets = ({sets, type}) => (
   })
 );
 
-const PokemonDraft = ({sets, type, picksPerPack}) => (
+const PokemonDraft = ({sets, type, picksPerPack, pokemonVersion}) => (
   <div>
     <div>
       Number of packs:{" "}
@@ -113,9 +113,23 @@ const PokemonDraft = ({sets, type, picksPerPack}) => (
         onChange={App._emit("changeSetsNumber", type)}
         opts={_.seq(12, 1)} />
     </div>
+    <div>
+      Version:{" "}
+      <Select
+        value={pokemonVersion}
+        onChange={App._emit("pokemonSetVersion")}
+        opts={["Austin:12.9","Austin:12.5",]} />
+    </div>
     <PicksPerPacks picksPerPack={picksPerPack} />
   </div>
 );
+
+PokemonDraft.propTypes = {
+  sets: PropTypes.array,
+  type: PropTypes.string,
+  picksPerPack: PropTypes.string,
+  pokemonVersion: PropTypes.string
+};
 
 const Decadent = ({sets, type, picksPerPack}) => (
   <Fragment>

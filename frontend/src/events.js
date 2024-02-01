@@ -123,7 +123,7 @@ const events = {
   },
 
   create() {
-    let {gametype, gamesubtype, seats, title, isPrivate, modernOnly, totalChaos, chaosDraftPacksNumber, chaosSealedPacksNumber, picksPerPack} = App.state;
+    let {gametype, gamesubtype, seats, title, isPrivate, modernOnly, totalChaos, chaosDraftPacksNumber, chaosSealedPacksNumber, picksPerPack, pokemonVersion} = App.state;
     seats = Number(seats);
 
     //TODO: either accept to use the legacy types (draft, sealed, chaos draft ...) by  keeping it like this
@@ -141,6 +141,7 @@ const events = {
     case "pokemon": {
       const {setsPokemon} = App.state;
       options.sets = setsPokemon;
+      options.pokemonVersion = pokemonVersion;
       break;
     }
     case "decadent":
@@ -154,6 +155,10 @@ const events = {
       break;
     }
     App.send("create", options);
+  },
+  pokemonSetVersion(event) {
+    App.save("pokemonVersion", event.currentTarget.value);
+
   },
   changeSetsNumber(type, event) {
     event.preventDefault();
